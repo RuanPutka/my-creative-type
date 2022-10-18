@@ -39,6 +39,7 @@ if st.button('Results'):
     classes = classes[order]
   
     fig, ax = plt.subplots()
+    ax.set_title("Your creative type", loc='left')
     ax.barh(classes, pred*100, color="#85007e")
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     ax.set_xticks([])
@@ -53,6 +54,6 @@ if st.button('Results'):
             plt.annotate(label, xy=(pred[i]*100 + 0.2, classes[i]), ha='left', va='center')
     
     st.pyplot(fig)
-    
-    components.iframe(html, height=600, scrolling=True)
+    "https://mycreativetype.com/the-creative-types/"  
+    # components.iframe(html, height=600, scrolling=True)
     
