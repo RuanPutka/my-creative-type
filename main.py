@@ -44,6 +44,15 @@ if st.button('Results'):
     fig, ax = plt.subplots()
     ax.barh(classes, pred*100)
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
+    ax.set_xticks([])
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+    
+    for i in range(len(pred)):
+        plt.annotate(f"{pred[i]:.0%}", xy=(pred[i]*100 + 0.2, classes[i]), ha='left', va='center')
+    
     st.pyplot(fig)
     
     components.iframe(html, height=600, scrolling=True)
