@@ -32,7 +32,7 @@ for i, row in questions_df.iterrows():
     '---'
     mapping[row['0']] = 0
     mapping[row['1']] = 1
-    question_sliders.append(st.select_slider(f"{row['question']}", options=[row['0'], "neutral", row['1']], value="neutral"))
+    question_sliders.append(st.select_slider(f"{row['question']}", options=[row['0'], "⮟", row['1']], value="⮟"))
     # '---'
 '---'
 html = "https://mycreativetype.com/the-creative-types/"   
