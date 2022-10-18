@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
@@ -25,36 +26,24 @@ mapping = {
 
 questions_df = pd.read_csv('data/questions.csv')
 
-st.write('# Questions')
-st.write('\n\n\n')
-st.write('\n\n\n')
-st.write('\n\n\n')
+st.markdown('# Questions')
 question_sliders = list()
 for i, row in questions_df.iterrows():
-
-    # text = f"{row['question']}: \n{row['0']} | {row['1']}"
-    st.text(f"{row['question']}:")
+    st.markdown(f"**{row['question']}**")
     options_text = f"{row['0']} | {row['1']}"
     question_sliders.append(st.slider(options_text, min_value=-2, max_value=2, step=1, value=0))
     '---'
 
-# # Add a selectbox to the sidebar:
-# add_selectbox = st.sidebar.selectbox(
-#     'How would you like to be contacted?',
-#     ('Email', 'Home phone', 'Mobile phone')
-# )
-
-# x = st.slider('x', min_value=-2, max_value=2, step=1, value=0)  # 👈 this is a widget
-# st.write(x, 'squared is', x * x)
-
-
-
-if st.button('Run'):
+html = "https://mycreativetype.com/the-creative-types/"   
+components.iframe(html)
+if st.button('Results'):
     answer = [mapping.get(x, 0) for x in question_sliders]
     pred = neigh.predict_proba([answer])[0]
+    classes = np.array([x.capitalize() for x in neigh.classes_])
     order = np.argsort(pred)
   
     fig, ax = plt.subplots()
-    ax.barh(neigh.classes_[order], pred[order]*100)
+    ax.barh(classes, pred*100)
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     st.pyplot(fig)
+    
