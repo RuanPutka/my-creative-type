@@ -35,7 +35,7 @@ for i, row in questions_df.iterrows():
     '---'
 
 html = "https://mycreativetype.com/the-creative-types/"   
-components.iframe(html)
+components.iframe(html, height=800)
 if st.button('Results'):
     answer = [mapping.get(x, 0) for x in question_sliders]
     pred = neigh.predict_proba([answer])[0]
