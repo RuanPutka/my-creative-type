@@ -29,11 +29,12 @@ questions_df = pd.read_csv('data/questions.csv')
 st.markdown('# Questions')
 question_sliders = list()
 for i, row in questions_df.iterrows():
-    st.markdown(f"**{row['question']}**")
-    options_text = f"{row['0']} | {row['1']}"
-    question_sliders.append(st.select_slider(options_text, options=["strong left", "soft left", "neutral", "soft right", "strong right"], value="neutral"))
     '---'
-
+    mapping[row['0']] = 0
+    mapping[row['1']] = 1
+    question_sliders.append(st.select_slider(f"{row['question']}", options=[row['0'], "neutral", row['1']], value="neutral"))
+    # '---'
+'---'
 html = "https://mycreativetype.com/the-creative-types/"   
 if st.button('Results'):
     answer = [mapping.get(x, 0) for x in question_sliders]
