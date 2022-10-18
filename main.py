@@ -1,59 +1,70 @@
 import streamlit as st
 import streamlit.components.v1 as components
+
 import pandas as pd
-from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 
+from sklearn.neighbors import KNeighborsClassifier
+
+done = False
+
+# reading data
 header = [f'Q{n}' for n in range(15)] + ['type']
 results_df = pd.read_csv('data/results.csv', sep=";", names=header)
 results_df.head()
 
+# modeling
 X = results_df.drop('type', axis=1).values
 y = results_df.type.values
 
 neigh = KNeighborsClassifier(n_neighbors=30, algorithm='brute')
 neigh.fit(X, y)
 
-mapping = dict()
-questions_df = pd.read_csv('data/questions.csv')
-
+# building questions
 st.markdown('# Questions')
+questions_df = pd.read_csv('data/questions.csv')
+mapping = dict()
 question_sliders = list()
 for i, row in questions_df.iterrows():
     '---'
     mapping[row['0']] = 0
     mapping[row['1']] = 1
     question_sliders.append(st.select_slider(f"{row['question']}", options=[row['0'], " ", row['1']], value=" "))
-    # '---'
 '---'
-html = "https://mycreativetype.com/the-creative-types/"   
+
+# showing results
 if st.button('Results'):
     answer = [mapping.get(x, 0) for x in question_sliders]
-    pred = neigh.predict_proba([answer])[0]
-    classes = np.array([x.capitalize() for x in neigh.classes_])
+    probabilities = neigh.predict_proba([answer])[0]
+    types = np.array([x.capitalize() for x in neigh.classes_])
     
-    order = np.argsort(pred)
-    pred = pred[order]
-    classes = classes[order]
+    # sorting from highest to lowest type probability 
+    order = np.argsort(probabilities)
+    probabilities = probabilities[order]
+    types = types[order]
   
+    # plotting
     fig, ax = plt.subplots()
     ax.set_title("Your creative type", loc='left')
-    ax.barh(classes, pred*100, color="#85007e")
+    ax.barh(types, probabilities*100, color="#85007e")
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     ax.set_xticks([])
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
-    
-    for i in range(len(pred)):
-        if pred[i] > 0:
-            label = f"{pred[i]:.0%}"
-            plt.annotate(label, xy=(pred[i]*100 + 0.2, classes[i]), ha='left', va='center')
+    ## annotations
+    for i in range(len(probabilities)):
+        if probabilities[i] > 0:
+            label = f"{probabilities[i]:.0%}"
+            plt.annotate(label, xy=(probabilities[i]*100 + 0.2, types[i]), ha='left', va='center')
     
     st.pyplot(fig)
+    done = True
+    # info link
     "https://mycreativetype.com/the-creative-types/"  
-    # components.iframe(html, height=600, scrolling=True)
+    # components.iframe("https://mycreativetype.com/the-creative-types/"  , height=600, scrolling=True)
     
