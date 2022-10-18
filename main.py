@@ -35,7 +35,6 @@ for i, row in questions_df.iterrows():
     '---'
 
 html = "https://mycreativetype.com/the-creative-types/"   
-components.iframe(html, height=800)
 if st.button('Results'):
     answer = [mapping.get(x, 0) for x in question_sliders]
     pred = neigh.predict_proba([answer])[0]
@@ -46,4 +45,6 @@ if st.button('Results'):
     ax.barh(classes, pred*100)
     ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     st.pyplot(fig)
+    
+    components.iframe(html, height=600, scrolling=True)
     
