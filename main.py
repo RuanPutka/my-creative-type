@@ -26,18 +26,23 @@ neigh.fit(X, y)
 # building questions
 st.markdown('# Questions')
 questions_df = pd.read_csv('data/questions.csv')
-mapping = dict()
+options = ["<<", " ", "  ",  "   ", ">>"]
+mapping = {k:v for k, v in zip(options, np.linspace(0, 1, len(options)))}
 question_sliders = list()
 for i, row in questions_df.iterrows():
     '---'
-    mapping[row['0']] = 0
-    mapping[row['1']] = 1
-    question_sliders.append(st.select_slider(f"{row['question']}", options=[row['0'], " ", row['1']], value=" "))
+    mapping[row["0"]] = 0
+    mapping[row["1"]] = 1
+    
+    options[0] = row["0"]
+    options[-1] = row["1"]
+    
+    question_sliders.append(st.select_slider(f"{row['question']}", options=options, value=options[2]))
 '---'
 
 # showing results
 if st.button('Results'):
-    answer = [mapping.get(x, 0) for x in question_sliders]
+    answer = [mapping.get(x, None) for x in question_sliders]
     probabilities = neigh.predict_proba([answer])[0]
     types = np.array([x.capitalize() for x in neigh.classes_])
     
