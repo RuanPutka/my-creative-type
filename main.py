@@ -17,11 +17,11 @@ neigh = KNeighborsClassifier(n_neighbors=30, algorithm='brute')
 neigh.fit(X, y)
 
 mapping = {
-    -2: 0,
-    -1: .25,
-    -0: .5,
-    1: .75,
-    2: 1,
+    "strong left": 0,
+    "soft left": .25,
+    "neutral": .5,
+    "soft right": .75,
+    "strong right": 1,
 }
 
 questions_df = pd.read_csv('data/questions.csv')
@@ -31,7 +31,7 @@ question_sliders = list()
 for i, row in questions_df.iterrows():
     st.markdown(f"**{row['question']}**")
     options_text = f"{row['0']} | {row['1']}"
-    question_sliders.append(st.slider(options_text, min_value=-2, max_value=2, step=1, value=0))
+    question_sliders.append(st.select_slider(options_text, options=["strong left", "soft left", "neutral", "soft right", "strong right"], value="neutral"))
     '---'
 
 html = "https://mycreativetype.com/the-creative-types/"   
