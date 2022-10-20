@@ -20,7 +20,7 @@ results_df.head()
 X = results_df.drop('type', axis=1).values
 y = results_df.type.values
 
-neigh = KNeighborsClassifier(n_neighbors=30, algorithm='brute')
+neigh = KNeighborsClassifier(n_neighbors=200, algorithm='brute')
 neigh.fit(X, y)
 
 # building questions
