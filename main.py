@@ -9,8 +9,6 @@ import matplotlib.ticker as mtick
 
 from sklearn.neighbors import KNeighborsClassifier
 
-done = False
-
 # reading data
 header = [f'Q{n}' for n in range(15)] + ['type']
 results_df = pd.read_csv('data/results.csv', sep=";", names=header)
@@ -68,7 +66,7 @@ if st.button('Results'):
             plt.annotate(label, xy=(probabilities[i]*100 + 0.2, types[i]), ha='left', va='center')
     
     st.pyplot(fig)
-    done = True
+
     # info link
     "https://mycreativetype.com/the-creative-types/"  
     # components.iframe("https://mycreativetype.com/the-creative-types/"  , height=600, scrolling=True)
