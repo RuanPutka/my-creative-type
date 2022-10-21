@@ -64,7 +64,7 @@ if st.button('Results'):
     ## annotations
     for i in range(len(probabilities)):
         if probabilities[i] > 0:
-            label = f"{probabilities[i]:.0%}"
+            label = f"{probabilities[i]:.1%}"
             plt.annotate(label, xy=(probabilities[i]*100 + 0.2, types[i]), ha='left', va='center')
     
     st.pyplot(fig)
